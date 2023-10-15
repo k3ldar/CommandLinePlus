@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Reflection;
 
 using CommandLinePlus.Abstractions;
@@ -53,7 +52,7 @@ namespace CommandLinePlus.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Construct_InvalidParam_EmptySearchAssemblies_Throws_ArgumnetNullException()
         {
-            new ConsoleProcessor("TestSuite", new CommandLineArgs(), null, new Assembly[] {  });
+            new ConsoleProcessor("TestSuite", new CommandLineArgs(), null, new Assembly[] { });
         }
 
         [TestMethod]

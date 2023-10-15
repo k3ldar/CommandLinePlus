@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
 using CommandLinePlus.Abstractions;
 
 using static CommandLinePlus.Constants;
-using static CommandLinePlus.VerbosityLevel;
 using static CommandLinePlus.Properties.Resources;
-using System.Globalization;
+using static CommandLinePlus.VerbosityLevel;
 
 #pragma warning disable CA2208
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CommandLinePlus
+﻿namespace CommandLinePlus
 {
     /// <summary>
     /// Base class for any command line processors
