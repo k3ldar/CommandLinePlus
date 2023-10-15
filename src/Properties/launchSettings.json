@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CommandLinePlus": {
+      "commandName": "Project",
+      "commandLineArgs": "/?"
+    }
+  }
+}

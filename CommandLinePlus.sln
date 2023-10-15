@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLinePlus", "src\CommandLinePlus.csproj", "{44DB31FC-1C8E-43BC-9163-585617508D92}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLinePlusTests", "tests\CommandLinePlusTests.csproj", "{BD93945B-D098-432A-8B38-BC8E5F35A9AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{47BF7F37-C8D3-4CBB-B47E-13E0FF6EE091}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44DB31FC-1C8E-43BC-9163-585617508D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44DB31FC-1C8E-43BC-9163-585617508D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44DB31FC-1C8E-43BC-9163-585617508D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44DB31FC-1C8E-43BC-9163-585617508D92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD93945B-D098-432A-8B38-BC8E5F35A9AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD93945B-D098-432A-8B38-BC8E5F35A9AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD93945B-D098-432A-8B38-BC8E5F35A9AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD93945B-D098-432A-8B38-BC8E5F35A9AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {46C5A33E-3F5D-4A23-9774-21130AF23AB1}
+	EndGlobalSection
+EndGlobal
