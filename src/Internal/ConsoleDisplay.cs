@@ -2,15 +2,13 @@
 using System.Globalization;
 using System.Runtime.CompilerServices;
 
-using CommandLinePlus.Abstractions;
-
 using static CommandLinePlus.Constants;
 
 namespace CommandLinePlus.Internal
 {
     internal sealed class ConsoleDisplay : IDisplay
     {
-        public ConsoleDisplay(ICommandLineArgs arguments)
+        public ConsoleDisplay(ICommandLineArguments arguments)
         {
             if (arguments == null)
                 throw new ArgumentNullException(nameof(arguments));

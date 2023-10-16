@@ -1,4 +1,4 @@
-﻿namespace CommandLinePlus.Abstractions
+﻿namespace CommandLinePlus
 {
     /// <summary>
     /// Command line processor
@@ -8,6 +8,7 @@
         /// <summary>
         /// Runs the processor
         /// </summary>
-        void Run();
+        /// <returns>RunResult</returns>
+        RunResult Run();
     }
 }

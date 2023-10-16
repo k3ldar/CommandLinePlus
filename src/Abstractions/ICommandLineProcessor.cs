@@ -1,4 +1,4 @@
-﻿namespace CommandLinePlus.Abstractions
+﻿namespace CommandLinePlus
 {
     /// <summary>
     /// Command line processor interface, each type of processor must

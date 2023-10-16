@@ -1,30 +1,32 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using CommandLinePlus.Abstractions;
+using CommandLinePlus;
+using CommandLinePlus.Internal;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace CommandLinePlus.Tests
+namespace CommandLinePlusTests
 {
     [TestClass]
     [ExcludeFromCodeCoverage]
-    public class CommandLineTests
+    public class CommandLineArgumentTests
     {
         [TestMethod]
         public void Construct_ValidInstance_Success()
         {
-            CommandLineArgs sut = new CommandLineArgs();
+            CommandLineArguments
+                sut = new CommandLineArguments();
 
             Assert.IsNotNull(sut);
 
-            Assert.IsNotNull(sut as ICommandLineArgs);
+            Assert.IsNotNull(sut as ICommandLineArguments);
         }
 
         [TestMethod]
         public void Construct_NullArgsConvertsToEmptyStringArray_Success()
         {
-            CommandLineArgs sut = new CommandLineArgs(null);
+            CommandLineArguments sut = new CommandLineArguments(null);
             Assert.AreEqual(0, sut.ArgumentCount);
         }
 
@@ -32,7 +34,7 @@ namespace CommandLinePlus.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Contains_InvalidParamNameNull_Throws_ArgumentNullException()
         {
-            CommandLineArgs sut = new CommandLineArgs();
+            CommandLineArguments sut = new CommandLineArguments();
             sut.Contains(null);
         }
 
@@ -40,7 +42,7 @@ namespace CommandLinePlus.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Contains_InvalidParamNameEmptyString_Throws_ArgumentNullException()
         {
-            CommandLineArgs sut = new CommandLineArgs();
+            CommandLineArguments sut = new CommandLineArguments();
             sut.Contains("");
         }
 
@@ -48,7 +50,7 @@ namespace CommandLinePlus.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Get_InvalidParamNameNull_Throws_ArgumentNullException()
         {
-            CommandLineArgs sut = new CommandLineArgs();
+            CommandLineArguments sut = new CommandLineArguments();
             sut.Get<object>(null);
         }
 
@@ -56,7 +58,7 @@ namespace CommandLinePlus.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Get_InvalidParamNameEmptyString_Throws_ArgumentNullException()
         {
-            CommandLineArgs sut = new CommandLineArgs();
+            CommandLineArguments sut = new CommandLineArguments();
             sut.Get<object>("");
         }
 
@@ -69,7 +71,7 @@ namespace CommandLinePlus.Tests
                 "/test3:test3value"
             };
 
-            CommandLineArgs sut = new CommandLineArgs(args);
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(3, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("test1"));
             Assert.IsTrue(sut.Contains("test2"));
@@ -82,7 +84,7 @@ namespace CommandLinePlus.Tests
         [TestMethod]
         public void Contains_NotFound_ReturnsFalse()
         {
-            CommandLineArgs sut = new CommandLineArgs();
+            CommandLineArguments sut = new CommandLineArguments();
             Assert.IsFalse(sut.Contains("test"));
         }
 
@@ -94,7 +96,7 @@ namespace CommandLinePlus.Tests
                 "--test2=test2V=alue",
                 "/test3:test3va:lue"
             };
-            CommandLineArgs sut = new CommandLineArgs(args);
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(3, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("test1"));
             Assert.IsTrue(sut.Contains("test1"));
@@ -110,7 +112,7 @@ namespace CommandLinePlus.Tests
             string[] args = new string[] {
                 "--test1 test1 value--test2=test2V=alue/test3:test3va:lUE",
             };
-            CommandLineArgs sut = new CommandLineArgs(args);
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(3, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("test1"));
             Assert.IsTrue(sut.Contains("test1"));
@@ -126,7 +128,7 @@ namespace CommandLinePlus.Tests
             string[] args = new string[] {
         "--test1 test1 value--test2=test2V=alue/test3:test3va:lUE--test",
       };
-            CommandLineArgs sut = new CommandLineArgs(args);
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(4, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("test"));
             Assert.IsTrue(sut.Contains("test1"));
@@ -143,7 +145,7 @@ namespace CommandLinePlus.Tests
             string[] args = new string[] {
         "--test1 test1 value--test2=test2V=alue/test3:test3va:lUE--test-",
       };
-            CommandLineArgs sut = new CommandLineArgs(args);
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(4, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("test"));
             Assert.IsTrue(sut.Contains("test1"));
@@ -157,10 +159,8 @@ namespace CommandLinePlus.Tests
         [TestMethod]
         public void Construct_AcceptsDoubleQuotesToContainValues_Success()
         {
-            string[] args = new string[] {
-        "--dq \"-100 --test /forward\""
-      };
-            CommandLineArgs sut = new CommandLineArgs(args);
+            string[] args = new string[] { "--dq \"-100 --test /forward\"" };
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(1, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("dq"));
             Assert.AreEqual("-100 --test /forward", sut.Get<string>("dq"));
@@ -169,10 +169,8 @@ namespace CommandLinePlus.Tests
         [TestMethod]
         public void Construct_AcceptsOpenEndedDoubleQuotesToContainValues_Success()
         {
-            string[] args = new string[] {
-        "--dq \"-100 --test /forward"
-      };
-            CommandLineArgs sut = new CommandLineArgs(args);
+            string[] args = new string[] { "--dq \"-100 --test /forward" };
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(1, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("dq"));
             Assert.AreEqual("-100 --test /forward", sut.Get<string>("dq"));
@@ -181,10 +179,8 @@ namespace CommandLinePlus.Tests
         [TestMethod]
         public void Construct_SingleDashForNegativeValue_Success()
         {
-            string[] args = new string[] {
-        "--nv -100"
-      };
-            CommandLineArgs sut = new CommandLineArgs(args);
+            string[] args = new string[] { "--nv -100" };
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(1, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("nv"));
             Assert.AreEqual(-100, sut.Get<int>("nv"));
@@ -193,10 +189,8 @@ namespace CommandLinePlus.Tests
         [TestMethod]
         public void Get_FailToConvertToTypeBool_ReturnsDefaultValueForType()
         {
-            string[] args = new string[] {
-        "--boolValue test1 value",
-      };
-            CommandLineArgs sut = new CommandLineArgs(args);
+            string[] args = new string[] { "--boolValue test1 value", };
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(1, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("boolValue"));
             Assert.IsFalse(sut.Get<bool>("boolValue"));
@@ -206,7 +200,7 @@ namespace CommandLinePlus.Tests
         public void Get_FailToConvertToTypeString_ReturnsDefaultValueForType()
         {
             string[] args = new string[] { };
-            CommandLineArgs sut = new CommandLineArgs(args);
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(0, sut.ArgumentCount);
             Assert.IsFalse(sut.Contains("stringValue"));
             Assert.IsNull(sut.Get<string>("stringValue"));
@@ -215,10 +209,8 @@ namespace CommandLinePlus.Tests
         [TestMethod]
         public void Get_FailToConvertToTypeInt_ReturnsDefaultValueForType()
         {
-            string[] args = new string[] {
-        "--IntValue test1 value",
-      };
-            CommandLineArgs sut = new CommandLineArgs(args);
+            string[] args = new string[] { "--IntValue test1 value", };
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(1, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("IntValue"));
             Assert.AreEqual(0, sut.Get<int>("IntValue"));
@@ -228,10 +220,34 @@ namespace CommandLinePlus.Tests
         public void Get_NotFound_ReturnsDefaultValueForType_Bool_Success()
         {
             string[] args = new string[] { };
-            CommandLineArgs sut = new CommandLineArgs(args);
+            CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(0, sut.ArgumentCount);
             Assert.IsFalse(sut.Contains("boolValue"));
             Assert.IsFalse(sut.Get<bool>("boolValue"));
+        }
+
+        [TestMethod]
+        public void PrimaryOption_Found_Success()
+        {
+            string[] args = new string[] { "Plugin", "Add", "--q:name" };
+            CommandLineArguments sut = new CommandLineArguments(args);
+            Assert.AreEqual("Plugin", sut.PrimaryOption);
+            Assert.AreEqual("Add", sut.SubOption);
+            Assert.AreEqual(1, sut.ArgumentCount);
+            Assert.IsTrue(sut.Contains("q"));
+            Assert.AreEqual("name", sut.Get<string>("q"));
+        }
+
+        [TestMethod]
+        public void SubOption_NotFound_Success()
+        {
+            string[] args = new string[] { "Plugin", "--q:name" };
+            CommandLineArguments sut = new CommandLineArguments(args);
+            Assert.AreEqual("Plugin", sut.PrimaryOption);
+            Assert.AreEqual("", sut.SubOption);
+            Assert.AreEqual(1, sut.ArgumentCount);
+            Assert.IsTrue(sut.Contains("q"));
+            Assert.AreEqual("name", sut.Get<string>("q"));
         }
     }
 }

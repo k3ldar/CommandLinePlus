@@ -1,30 +1,27 @@
-﻿using System.Reflection;
-
-using CommandLinePlus.Abstractions;
-using CommandLinePlus.Internal;
+﻿using CommandLinePlus.Internal;
 
 namespace CommandLinePlus
 {
-    internal class ConsoleProcessorFactory : IConsoleProcessorFactory
+    /// <summary>
+    /// Console processor factory
+    /// </summary>
+    public class ConsoleProcessorFactory : IConsoleProcessorFactory
     {
-        public IConsoleProcessor Create(string processName)
+        /// <summary>
+        /// Create an instance of IConsoleProcessor
+        /// </summary>
+        /// <param name="processName">Name of process</param>
+        /// <param name="processors">Available processors</param>
+        /// <param name="args">ICommandLineArgs instance, if null default command line arg processor will be used</param>
+        /// <param name="display">IDisplay instance, if null default console display will be used</param>
+        /// <returns></returns>
+        public IConsoleProcessor Create(string processName, object[] processors, ICommandLineArguments args = null, IDisplay display = null)
         {
-            return Create(processName, new CommandLineArgs());
-        }
-
-        public IConsoleProcessor Create(string processName, ICommandLineArgs args)
-        {
-            return Create(processName, args, new ConsoleDisplay(args));
-        }
-
-        public IConsoleProcessor Create(string processName, ICommandLineArgs args, IDisplay display)
-        {
-            return Create(processName, args, display, new[] { Assembly.GetExecutingAssembly() });
-        }
-
-        public IConsoleProcessor Create(string processName, ICommandLineArgs args, IDisplay display, Assembly[] assemblies)
-        {
-            return new ConsoleProcessor(processName, args, display, assemblies);
+            args ??= new CommandLineArguments();
+            return new ConsoleProcessorFacade(processName,
+                processors,
+                args,
+                display ?? new ConsoleDisplay(args));
         }
     }
 }

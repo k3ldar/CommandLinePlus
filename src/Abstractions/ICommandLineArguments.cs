@@ -1,11 +1,21 @@
-﻿namespace CommandLinePlus.Abstractions
+﻿namespace CommandLinePlus
 {
 #pragma warning disable CA1716
     /// <summary>
     /// Interface for command line options
     /// </summary>
-    public interface ICommandLineArgs
+    public interface ICommandLineArguments
     {
+        /// <summary>
+        /// Primary option from command line
+        /// </summary>
+        string PrimaryOption { get; }
+
+        /// <summary>
+        /// Sub option, optional
+        /// </summary>
+        string SubOption { get; }
+
         /// <summary>
         /// Determines whether a command line argument exists or not by name (case insensitive)
         /// </summary>
@@ -29,6 +39,12 @@
         /// <param name="defaultValue">Default value if not found</param>
         /// <returns>Value of type T</returns>
         T Get<T>(string name, T defaultValue);
+
+        /// <summary>
+        /// Retrieves all arguments without primary and sub option
+        /// </summary>
+        /// <returns>string array</returns>
+        string[] AllArguments();
     }
 #pragma warning restore CA1716
 }

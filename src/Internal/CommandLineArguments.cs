@@ -1,37 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
-
-using CommandLinePlus.Abstractions;
 
 using static CommandLinePlus.Constants;
 
-namespace CommandLinePlus
+namespace CommandLinePlus.Internal
 {
-    internal sealed class CommandLineArgs : ICommandLineArgs
+    internal sealed class CommandLineArguments : ICommandLineArguments
     {
         #region Private Members
 
         private readonly Dictionary<string, string> _args;
+        private readonly string _primaryOption;
+        private readonly string _subOption;
 
         #endregion Private Members
 
         #region Constructors
 
-        public CommandLineArgs()
+        public CommandLineArguments()
           : this(Environment.GetCommandLineArgs())
         {
 
         }
 
-        public CommandLineArgs(string[] args)
+        public CommandLineArguments(string[] args)
         {
-            _args = ConvertArgsToDictionary(args ?? Array.Empty<string>());
+            (_primaryOption, _subOption, _args) = ConvertArgsToDictionary(args ?? Array.Empty<string>());
         }
 
         #endregion Constructors
 
         #region Properties
+
+        public string PrimaryOption => _primaryOption;
+
+        public string SubOption => _subOption;
 
         /// <summary>
         /// Number of arguments supplied via constructor
@@ -84,22 +90,38 @@ namespace CommandLinePlus
             }
         }
 
+        public string[] AllArguments()
+        {
+            List<string> args = new();
+
+            foreach (var item in _args)
+            {
+                args.Add($"{item.Key}={item.Value}");
+            }
+
+            return args.ToArray();
+        }
+
         #endregion ICommandLine Methods
 
         #region Private Methods
 
-        private static Dictionary<string, string> ConvertArgsToDictionary(string[] args)
+        private static (string, string, Dictionary<string, string>) ConvertArgsToDictionary(string[] args)
         {
+            string primaryOption = "";
+            string subOption = "";
             var result = new Dictionary<string, string>();
             var currentArg = new StringBuilder(30);
             var currentArgValue = new StringBuilder();
 
             string arg = string.Join(" ", args);
 
+            bool peekAhead;
             bool argFound = false;
             bool argValue = false;
-            bool peekAhead = false;
             bool isQuote = false;
+            bool isPrimary = true;
+            bool isSub = false;
 
             for (int i = 0; i < arg.Length; i++)
             {
@@ -118,6 +140,12 @@ namespace CommandLinePlus
                     case CharDash:
                         if (!peekAhead)
                             continue;
+
+                        if (isPrimary || isSub)
+                        {
+                            isPrimary = false;
+                            isSub = false;
+                        }
 
                         if (isQuote && argValue)
                         {
@@ -149,16 +177,42 @@ namespace CommandLinePlus
                             argFound = true;
                             argValue = false;
                         }
-                        else if (arg[i + 1] == CharDash)
+                        else if (arg[i] == CharDash || (peekAhead && arg[i + 1] == CharDash))
                         {
                             argFound = true;
                             argValue = false;
-                            i++;
+                            
+                            if (peekAhead && arg[i + 1] == CharDash)
+                                i++;
                         }
 
                         continue;
 
                     case CharSpace:
+                        if (isPrimary)
+                        {
+                            primaryOption = currentArg.ToString();
+                            currentArg.Clear();
+                            isSub = true;
+                            isPrimary = false;
+                        }
+                        else if (isSub)
+                        {
+                            subOption = currentArg.ToString();
+                            currentArg.Clear();
+                            isSub = false;
+                        }
+                        else if (argFound && !argValue)
+                        {
+                            argValue = true;
+                        }
+                        else if (argValue)
+                        {
+                            currentArgValue.Append(c);
+                        }
+
+                        continue;
+
                     case CharColon:
                     case CharEquals:
                         if (argFound && !argValue)
@@ -169,7 +223,11 @@ namespace CommandLinePlus
                         continue;
 
                     default:
-                        if (argValue)
+                        if (isPrimary || isSub)
+                        {
+                            currentArg.Append(c);
+                        }
+                        else if (argValue)
                         {
                             currentArgValue.Append(c);
                             continue;
@@ -187,7 +245,7 @@ namespace CommandLinePlus
             if (currentArg.Length > 0)
                 result[currentArg.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture)] = currentArgValue.ToString().Trim();
 
-            return result;
+            return (primaryOption, subOption, result);
         }
 
         #endregion Private Methods

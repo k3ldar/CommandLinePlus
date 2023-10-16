@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using CommandLinePlus;
-using CommandLinePlus.Abstractions;
 
 namespace CommandLinePlusTests.Mocks
 {

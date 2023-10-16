@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommandLinePlus.Abstractions
+namespace CommandLinePlus
 {
     /// <summary>
     /// Interface used for displaying information to the user
