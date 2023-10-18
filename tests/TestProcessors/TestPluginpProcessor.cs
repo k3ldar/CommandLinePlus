@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using CommandLinePlus;
@@ -27,29 +28,38 @@ namespace CommandLinePlusTests.TestProcessors
         public override void Execute(string[] args)
         {
             // default handler 
+            MethodsCalled.Add(nameof(Execute));
             ArgsPassedToExecute = args;
         }
 
         public void Add(string p)
         {
-            // test method
+            MethodsCalled.Add(nameof(Add));
+            ArgsPassed.Add(p);
         }
 
         public void Remove(string p)
         {
-            // test method
+            MethodsCalled.Add(nameof(Remove));
+            ArgsPassed.Add(p);
         }
 
         public void Disable(string p)
         {
-            // test method
+            MethodsCalled.Add(nameof(Disable));
+            ArgsPassed.Add(p);
         }
 
-        public void Enabled(string p)
+        public void Enable(string p)
         {
-            // test method
+            MethodsCalled.Add(nameof(Enable));
+            ArgsPassed.Add(p);
         }
 
         public string[] ArgsPassedToExecute { get; private set; }
+
+        public List<string> MethodsCalled { get; private set; } = new();
+
+        public List<string> ArgsPassed { get; private set; } = new();
     }
 }

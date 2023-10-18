@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+
+using static System.Net.Mime.MediaTypeNames;
 using static CommandLinePlus.Constants;
 using static CommandLinePlus.Properties.Resources;
 using static CommandLinePlus.VerbosityLevel;
@@ -64,14 +67,19 @@ namespace CommandLinePlus.Internal
 
             Type processorType = processors[0].GetType();
 
-            List<MethodInfo> methodInfo = processorType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            List<MethodInfo> methods = processorType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => m.Name.Equals(_args.SubOption, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(m => m.GetParameters().Length)
                 .ToList();
 
-             find a matching method that has the right parameters for those passed, include default parameters if missing etc
+            // find a matching method that has the right parameters for those passed, include default parameters if missing etc
+            RunResult candidateResult = ValidateMatchingCandidateMethods(processors[0], methods);
 
-            // validate above matching param, if not found fall into below if test
-            if (methodInfo.Count == 0)
+            if (candidateResult == RunResult.InvalidParameters || candidateResult == RunResult.CandidateFound)
+                return candidateResult;
+
+            // validate above matching param, if not found fall into below 
+            if (methods.Count == 0)
             {
                 // no candidate methods found, use default method instead
                 var defaultMethod = processorType.GetMethod(nameof(BaseCommandLine.Execute), BindingFlags.Instance | BindingFlags.Public);
@@ -79,7 +87,79 @@ namespace CommandLinePlus.Internal
                 return RunResult.DefaultSubOptionUsed;
             }
 
-            return RunResult.TooManyCandidates;
+            // should never reach this point!
+            throw new InvalidOperationException("No candidates found and deault method was not called");
+        }
+
+        private RunResult ValidateMatchingCandidateMethods(object instance, List<MethodInfo> methods)
+        {
+            if (methods.Count == 0)
+                return RunResult.DefaultSubOptionUsed;
+
+            for (int i = methods.Count -1; i > -1; i--)
+            {
+                MethodInfo method = methods[i];
+                bool isValidCandidate = true;
+                List<object> parameters = new();
+                List<string> errorList = new();
+
+                // validate each parameter
+                foreach (var param in method.GetParameters())
+                {
+                    if (_args.Contains(param.Name))
+                    {
+                        // validate the param to make sure it can be used
+                        try
+                        {
+                            if (param.ParameterType.FullName.Equals("System.Guid", StringComparison.Ordinal))
+                            {
+                                parameters.Add(TypeDescriptor.GetConverter(param.ParameterType).ConvertFromInvariantString(_args.Get<string>(param.Name)));
+                            }
+                            else
+                            {
+                                parameters.Add(Convert.ChangeType(_args.Get<string>(param.Name), param.ParameterType));
+                            }
+                        }
+                        catch (Exception e)
+                            when (e is InvalidCastException || 
+                                  e is FormatException ||
+                                  e is OverflowException ||
+                                  e is ArgumentNullException)
+                        {
+                            isValidCandidate = false;
+                            errorList.Add($"Could not convert argument {param.Name} ({_args.Get<string>(param.Name)}) to {param.ParameterType.Name} - {e.Message}");
+                        }
+                    }
+                    else if (param.IsOptional && param.HasDefaultValue)
+                    {
+                        parameters.Add(param.DefaultValue);
+                    }
+                    else
+                    {
+                        isValidCandidate = false;
+                    }
+                }
+
+                if (isValidCandidate)
+                {
+                    method.Invoke(instance, parameters.ToArray());
+                    return RunResult.CandidateFound;
+                }
+
+                methods.Remove(method);
+
+                if (errorList.Count > 0)
+                {
+                    foreach(string error in errorList)
+                    {
+                        _display.WriteLine(error);
+                    }
+
+                    return RunResult.InvalidParameters;
+                }
+            }
+
+            throw new NotImplementedException();
         }
 
         private void ShowHelpForAllCommandLineProcessors(List<BaseCommandLine> processors)

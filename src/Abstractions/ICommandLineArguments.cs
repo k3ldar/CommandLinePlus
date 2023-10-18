@@ -1,4 +1,6 @@
-﻿namespace CommandLinePlus
+﻿using System.Collections.Generic;
+
+namespace CommandLinePlus
 {
 #pragma warning disable CA1716
     /// <summary>
@@ -45,6 +47,12 @@
         /// </summary>
         /// <returns>string array</returns>
         string[] AllArguments();
+
+        ///// <summary>
+        ///// Returns a list of invalid arguments
+        ///// </summary>
+        ///// <returns>List&lt;string&gt;</returns>
+        //IReadOnlyList<string> InvalidArgs { get; }
     }
 #pragma warning restore CA1716
 }

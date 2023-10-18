@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 
 using static CommandLinePlus.Constants;
@@ -114,11 +112,16 @@ namespace CommandLinePlus.Internal
             var currentArg = new StringBuilder(30);
             var currentArgValue = new StringBuilder();
 
-            string arg = string.Join(" ", args);
+            string arg = String.Empty;
+
+            foreach (string s in args)
+                arg += $" {s.Trim()}";
+
+            arg = arg.Trim();
 
             bool peekAhead;
-            bool argFound = false;
-            bool argValue = false;
+            bool isArgFound = false;
+            bool isArgValue = false;
             bool isQuote = false;
             bool isPrimary = true;
             bool isSub = false;
@@ -132,8 +135,16 @@ namespace CommandLinePlus.Internal
                 {
                     case CharDblQuotes:
                         isQuote = !isQuote;
-                        argValue = isQuote;
+                        isArgValue = isQuote;
 
+                        if (!isQuote)
+                        {
+                            result.Add(currentArg.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture), currentArgValue.ToString().Trim());
+                            currentArg.Clear();
+                            currentArgValue.Clear();
+                            isArgFound = false;
+                            isArgValue = false;
+                        }
                         continue;
 
                     case CharForwardSlash:
@@ -147,41 +158,41 @@ namespace CommandLinePlus.Internal
                             isSub = false;
                         }
 
-                        if (isQuote && argValue)
+                        if (isQuote && isArgValue)
                         {
                             currentArgValue.Append(c);
                             continue;
                         }
 
-                        if (argFound && argValue && arg[i + 1] != CharDash && c != CharForwardSlash)
+                        if (isArgFound && isArgValue && arg[i + 1] != CharDash && c != CharForwardSlash)
                         {
-                            argValue = true;
+                            isArgValue = true;
                             currentArgValue.Append(c);
                             continue;
                         }
 
-                        if (argValue)
+                        if (isArgValue)
                         {
                             result.Add(currentArg.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture), currentArgValue.ToString().Trim());
                             currentArg.Clear();
                             currentArgValue.Clear();
-                            argFound = false;
-                            argValue = false;
+                            isArgFound = false;
+                            isArgValue = false;
                         }
 
-                        if (argFound)
+                        if (isArgFound)
                             continue;
 
                         if (arg[i] == CharForwardSlash)
                         {
-                            argFound = true;
-                            argValue = false;
+                            isArgFound = true;
+                            isArgValue = false;
                         }
                         else if (arg[i] == CharDash || (peekAhead && arg[i + 1] == CharDash))
                         {
-                            argFound = true;
-                            argValue = false;
-                            
+                            isArgFound = true;
+                            isArgValue = false;
+
                             if (peekAhead && arg[i + 1] == CharDash)
                                 i++;
                         }
@@ -202,22 +213,30 @@ namespace CommandLinePlus.Internal
                             currentArg.Clear();
                             isSub = false;
                         }
-                        else if (argFound && !argValue)
-                        {
-                            argValue = true;
-                        }
-                        else if (argValue)
+                        //else if (isArgFound && !isArgValue)
+                        //{
+                        //    isArgValue = true;
+                        //}
+                        else if (isArgValue && isQuote)
                         {
                             currentArgValue.Append(c);
+                        }
+                        else if (currentArg.Length > 0)
+                        {
+                            result.Add(currentArg.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture), currentArgValue.ToString().Trim());
+                            currentArg.Clear();
+                            currentArgValue.Clear();
+                            isArgFound = false;
+                            isArgValue = false;
                         }
 
                         continue;
 
                     case CharColon:
                     case CharEquals:
-                        if (argFound && !argValue)
-                            argValue = true;
-                        else if (argValue)
+                        if (isArgFound && !isArgValue)
+                            isArgValue = true;
+                        else if (isArgValue)
                             currentArgValue.Append(c);
 
                         continue;
@@ -227,12 +246,12 @@ namespace CommandLinePlus.Internal
                         {
                             currentArg.Append(c);
                         }
-                        else if (argValue)
+                        else if (isArgValue)
                         {
                             currentArgValue.Append(c);
                             continue;
                         }
-                        else if (argFound)
+                        else if (isArgFound)
                         {
                             currentArg.Append(c);
                             continue;

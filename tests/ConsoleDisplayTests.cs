@@ -154,7 +154,7 @@ namespace CommandLinePlusTests
         [TestMethod]
         public void Verbosity_SetByArgsDiagnostic_Success()
         {
-            string[] args = new string[] { "--v 2" };
+            string[] args = new string[] { "--v:2" };
             ConsoleDisplay sut = new ConsoleDisplay(new CommandLineArguments(args));
             Assert.AreEqual(VerbosityLevel.Diagnostic, sut.Verbosity);
         }

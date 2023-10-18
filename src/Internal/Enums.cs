@@ -29,6 +29,16 @@
         /// Sub option not found, default sub option used instead
         /// </summary>
         DefaultSubOptionUsed = 4,
+
+        /// <summary>
+        /// A candidate method was found but invalid cmd line args were passed
+        /// </summary>
+        InvalidParameters = 5,
+
+        /// <summary>
+        /// Valid candidate found
+        /// </summary>
+        CandidateFound = 6,
     }
 
     /// <summary>

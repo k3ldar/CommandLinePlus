@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using CommandLinePlus;
 using CommandLinePlus.Internal;
@@ -66,19 +67,19 @@ namespace CommandLinePlusTests
         public void Contains_CanHandleMultipleSeperatorTypes_ReturnsThreeItems()
         {
             string[] args = new string[] {
-                "--test1 test1value",
-                "--test2=test2value",
-                "/test3:test3value"
+                "-testa testavalue",
+                "--testb=testbvalue",
+                "/testc:testcvalue"
             };
 
             CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(3, sut.ArgumentCount);
-            Assert.IsTrue(sut.Contains("test1"));
-            Assert.IsTrue(sut.Contains("test2"));
-            Assert.IsTrue(sut.Contains("test3"));
-            Assert.AreEqual("test1value", sut.Get<string>("test1"));
-            Assert.AreEqual("test2value", sut.Get<string>("test2"));
-            Assert.AreEqual("test3value", sut.Get<string>("test3"));
+            Assert.IsTrue(sut.Contains("testa"));
+            Assert.IsTrue(sut.Contains("testb"));
+            Assert.IsTrue(sut.Contains("testc"));
+            Assert.AreEqual("", sut.Get<string>("testa"));
+            Assert.AreEqual("testbvalue", sut.Get<string>("testb"));
+            Assert.AreEqual("testcvalue", sut.Get<string>("testc"));
         }
 
         [TestMethod]
@@ -92,18 +93,21 @@ namespace CommandLinePlusTests
         public void Construct_InvalidParamValue_Ignored()
         {
             string[] args = new string[] {
-                "--test1 test1 value",
+                "-test1 test1 value",
                 "--test2=test2V=alue",
                 "/test3:test3va:lue"
             };
             CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(3, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("test1"));
-            Assert.IsTrue(sut.Contains("test1"));
-            Assert.IsTrue(sut.Contains("test1"));
-            Assert.AreEqual("test1 value", sut.Get<string>("test1"));
+            Assert.IsTrue(sut.Contains("test2"));
+            Assert.IsTrue(sut.Contains("test3"));
+            Assert.AreEqual("", sut.Get<string>("test1"));
             Assert.AreEqual("test2V=alue", sut.Get<string>("test2"));
             Assert.AreEqual("test3va:lue", sut.Get<string>("test3"));
+            //Assert.AreEqual(2, sut.InvalidArgs.Count);
+            //Assert.IsTrue(sut.InvalidArgs.Contains("test1"));
+            //Assert.IsTrue(sut.InvalidArgs.Contains("value"));
         }
 
         [TestMethod]
@@ -115,43 +119,49 @@ namespace CommandLinePlusTests
             CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(3, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("test1"));
-            Assert.IsTrue(sut.Contains("test1"));
-            Assert.IsTrue(sut.Contains("test1"));
-            Assert.AreEqual("test1 value", sut.Get<string>("test1"));
+            Assert.IsTrue(sut.Contains("test2"));
+            Assert.IsTrue(sut.Contains("test3"));
+            Assert.AreEqual("", sut.Get<string>("test1"));
             Assert.AreEqual("test2V=alue", sut.Get<string>("test2"));
             Assert.AreEqual("test3va:lUE", sut.Get<string>("test3"));
+            //Assert.AreEqual(2, sut.InvalidArgs.Count);
+            //Assert.IsTrue(sut.InvalidArgs.Contains("test1"));
+            //Assert.IsTrue(sut.InvalidArgs.Contains("value"));
         }
 
         [TestMethod]
         public void Construct_FindsLastParam_Success()
         {
             string[] args = new string[] {
-        "--test1 test1 value--test2=test2V=alue/test3:test3va:lUE--test",
-      };
+                "--test1 test1 value--test2=test2V=alue/test3:test3va:lUE--test",
+            };
             CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(4, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("test"));
             Assert.IsTrue(sut.Contains("test1"));
-            Assert.IsTrue(sut.Contains("test1"));
-            Assert.IsTrue(sut.Contains("test1"));
-            Assert.AreEqual("test1 value", sut.Get<string>("test1"));
+            Assert.IsTrue(sut.Contains("test2"));
+            Assert.IsTrue(sut.Contains("test3"));
+            Assert.AreEqual("", sut.Get<string>("test1"));
             Assert.AreEqual("test2V=alue", sut.Get<string>("test2"));
             Assert.AreEqual("test3va:lUE", sut.Get<string>("test3"));
+            //Assert.AreEqual(2, sut.InvalidArgs.Count);
+            //Assert.IsTrue(sut.InvalidArgs.Contains("test1"));
+            //Assert.IsTrue(sut.InvalidArgs.Contains("value"));
         }
 
         [TestMethod]
         public void Construct_LastValueDoesNotExist_Success()
         {
             string[] args = new string[] {
-        "--test1 test1 value--test2=test2V=alue/test3:test3va:lUE--test-",
-      };
+                "--test1 test1 value--test2=test2V=alue/test3:test3va:lUE--test-",
+            };
             CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(4, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("test"));
-            Assert.IsTrue(sut.Contains("test1"));
-            Assert.IsTrue(sut.Contains("test1"));
-            Assert.IsTrue(sut.Contains("test1"));
-            Assert.AreEqual("test1 value", sut.Get<string>("test1"));
+            Assert.IsTrue(sut.Contains("test2"));
+            Assert.IsTrue(sut.Contains("test3"));
+            Assert.IsTrue(sut.Contains("test"));
+            Assert.AreEqual("", sut.Get<string>("test1"));
             Assert.AreEqual("test2V=alue", sut.Get<string>("test2"));
             Assert.AreEqual("test3va:lUE", sut.Get<string>("test3"));
         }
@@ -159,7 +169,7 @@ namespace CommandLinePlusTests
         [TestMethod]
         public void Construct_AcceptsDoubleQuotesToContainValues_Success()
         {
-            string[] args = new string[] { "--dq \"-100 --test /forward\"" };
+            string[] args = new string[] { "--dq:\"-100 --test /forward\"" };
             CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(1, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("dq"));
@@ -169,7 +179,7 @@ namespace CommandLinePlusTests
         [TestMethod]
         public void Construct_AcceptsOpenEndedDoubleQuotesToContainValues_Success()
         {
-            string[] args = new string[] { "--dq \"-100 --test /forward" };
+            string[] args = new string[] { "--dq=\"-100 --test /forward" };
             CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(1, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("dq"));
@@ -181,9 +191,22 @@ namespace CommandLinePlusTests
         {
             string[] args = new string[] { "--nv -100" };
             CommandLineArguments sut = new CommandLineArguments(args);
-            Assert.AreEqual(1, sut.ArgumentCount);
+            Assert.AreEqual(2, sut.ArgumentCount);
             Assert.IsTrue(sut.Contains("nv"));
-            Assert.AreEqual(-100, sut.Get<int>("nv"));
+            Assert.IsTrue(sut.Contains("100"));
+            Assert.AreEqual(0, sut.Get<int>("nv"));
+        }
+
+        [TestMethod]
+        public void Construct_InvalidParamsFound_Success()
+        {
+            string[] args = new string[] { "--boolValue:true test1 value" };
+            CommandLineArguments sut = new CommandLineArguments(args);
+            Assert.AreEqual(1, sut.ArgumentCount);
+            //Assert.AreEqual(2, sut.InvalidArgs.Count);
+            //Assert.IsTrue(sut.InvalidArgs.Contains("test1"));
+            //Assert.IsTrue(sut.InvalidArgs.Contains("value"));
+            Assert.IsTrue(sut.Get<bool>("boolValue"));
         }
 
         [TestMethod]
