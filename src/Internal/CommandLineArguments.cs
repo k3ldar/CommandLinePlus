@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 using static CommandLinePlus.Constants;
@@ -142,11 +143,7 @@ namespace CommandLinePlus.Internal
 
                         if (!isQuote)
                         {
-                            result.Add(currentArg.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture), currentArgValue.ToString().Trim());
-                            currentArg.Clear();
-                            currentArgValue.Clear();
-                            isArgFound = false;
-                            isArgValue = false;
+                            AddCmdLineArg(result, currentArg, currentArgValue, out isArgFound, out isArgValue);
                         }
                         continue;
 
@@ -176,11 +173,7 @@ namespace CommandLinePlus.Internal
 
                         if (isArgValue)
                         {
-                            result.Add(currentArg.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture), currentArgValue.ToString().Trim());
-                            currentArg.Clear();
-                            currentArgValue.Clear();
-                            isArgFound = false;
-                            isArgValue = false;
+                            AddCmdLineArg(result, currentArg, currentArgValue, out isArgFound, out isArgValue);
                         }
 
                         if (isArgFound)
@@ -222,11 +215,7 @@ namespace CommandLinePlus.Internal
                         }
                         else if (currentArg.Length > 0)
                         {
-                            result.Add(currentArg.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture), currentArgValue.ToString().Trim());
-                            currentArg.Clear();
-                            currentArgValue.Clear();
-                            isArgFound = false;
-                            isArgValue = false;
+                            AddCmdLineArg(result, currentArg, currentArgValue, out isArgFound, out isArgValue);
                         }
 
                         continue;
@@ -264,6 +253,16 @@ namespace CommandLinePlus.Internal
                 result[currentArg.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture)] = currentArgValue.ToString().Trim();
 
             return (primaryOption, subOption, result);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void AddCmdLineArg(Dictionary<string, string> result, StringBuilder currentArg, StringBuilder currentArgValue, out bool isArgFound, out bool isArgValue)
+        {
+            result.Add(currentArg.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture), currentArgValue.ToString().Trim());
+            currentArg.Clear();
+            currentArgValue.Clear();
+            isArgFound = false;
+            isArgValue = false;
         }
 
         #endregion Private Methods
