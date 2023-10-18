@@ -27,22 +27,26 @@ namespace CmdLineTest
 
         public void Add(string p)
         {
-            Console.WriteLine($"Add plugin {p}");
+            if (IsEnabled)
+                Console.WriteLine($"Add plugin {p}");
         }
 
         public void Remove(string p)
         {
-            Console.WriteLine($"Remove plugin {p}");
+            if (IsEnabled)
+                Console.WriteLine($"Remove plugin {p}");
         }
 
         public void Disable(string p)
         {
-            Console.WriteLine($"Disable plugin {p}");
+            if (IsEnabled)
+                Console.WriteLine($"Disable plugin {p}");
         }
 
         public void Enable(string p)
         {
-            Console.WriteLine($"Enable plugin {p}");
+            if (IsEnabled)
+                Console.WriteLine($"Enable plugin {p}");
         }
     }
 }

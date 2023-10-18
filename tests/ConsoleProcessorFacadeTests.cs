@@ -61,8 +61,8 @@ namespace CommandLinePlusTests
         public void Run_HelpOptions_Success()
         {
             ICommandLineArguments args = new CommandLineArguments(new string[] { "--?" });
-            MockDisplay mockDisplay = new MockDisplay();
-            ConsoleProcessorFacade sut = new ConsoleProcessorFacade("TestSuite", new object[] { new TestPluginpProcessor() }, args, mockDisplay);
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("TestSuite", new object[] { new TestPluginpProcessor() }, args, mockDisplay);
 
             sut.Run();
 
@@ -74,8 +74,8 @@ namespace CommandLinePlusTests
         public void Run_InvalidProcessor_DoesNotDescendFromBaseCommandLine_Throws_InvalidOperationException()
         {
             ICommandLineArguments args = new CommandLineArguments(new string[] { "--?" });
-            MockDisplay mockDisplay = new MockDisplay();
-            ConsoleProcessorFacade sut = new ConsoleProcessorFacade("TestSuite", 
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("TestSuite", 
                 new object[] 
                 { 
                     new InvalidProcessor() 
@@ -91,8 +91,8 @@ namespace CommandLinePlusTests
         public void Run_MoreThanOneCandidateAvailable_Returns_TooManyCandidates()
         {
             ICommandLineArguments args = new CommandLineArguments(new string[] { "Plugin Add -p:myplugin" });
-            MockDisplay mockDisplay = new MockDisplay();
-            ConsoleProcessorFacade sut = new ConsoleProcessorFacade("TestSuite",
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("TestSuite",
                 new object[]
                 {
                     new TestPluginpProcessor(),
@@ -108,8 +108,8 @@ namespace CommandLinePlusTests
         public void Run_NotEnoughCandidatesAvailable_Returns_NotEnoughCandidates()
         {
             ICommandLineArguments args = new CommandLineArguments(new string[] { "Test Add -p:myplugin" });
-            MockDisplay mockDisplay = new MockDisplay();
-            ConsoleProcessorFacade sut = new ConsoleProcessorFacade("TestSuite",
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("TestSuite",
                 new object[]
                 {
                     new TestPluginpProcessor(),
@@ -125,8 +125,8 @@ namespace CommandLinePlusTests
         {
             TestPluginpProcessor testProcessor = new();
             ICommandLineArguments args = new CommandLineArguments(new string[] { "Plugin", "test", "-p:myplugin" });
-            MockDisplay mockDisplay = new MockDisplay();
-            ConsoleProcessorFacade sut = new ConsoleProcessorFacade("TestSuite",
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("TestSuite",
                 new object[]
                 {
                     testProcessor,
@@ -144,8 +144,8 @@ namespace CommandLinePlusTests
         {
             TestPluginpProcessor testProcessor = new();
             ICommandLineArguments args = new CommandLineArguments(new string[] { "Plugin", "add", "-p:myplugin" });
-            MockDisplay mockDisplay = new MockDisplay();
-            ConsoleProcessorFacade sut = new ConsoleProcessorFacade("TestSuite",
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("TestSuite",
                 new object[]
                 {
                     testProcessor,
@@ -171,8 +171,8 @@ namespace CommandLinePlusTests
                     "-b:hello",
                     "--c=world"
                 });
-            MockDisplay mockDisplay = new MockDisplay();
-            ConsoleProcessorFacade sut = new ConsoleProcessorFacade("My Program",
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("My Program",
                 new object[]
                 {
                     testProcessor,
@@ -200,8 +200,8 @@ namespace CommandLinePlusTests
                     "-b:hello",
                     "--c=world",
                 });
-            MockDisplay mockDisplay = new MockDisplay();
-            ConsoleProcessorFacade sut = new ConsoleProcessorFacade("My Program",
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("My Program",
                 new object[]
                 {
                     testProcessor,
@@ -226,8 +226,8 @@ namespace CommandLinePlusTests
                     "--c=world",
                     "-e:874635"
                 });
-            MockDisplay mockDisplay = new MockDisplay();
-            ConsoleProcessorFacade sut = new ConsoleProcessorFacade("My Program",
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("My Program",
                 new object[]
                 {
                     testProcessor,

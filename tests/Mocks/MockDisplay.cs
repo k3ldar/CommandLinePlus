@@ -7,7 +7,7 @@ namespace CommandLinePlusTests.Mocks
 {
     internal class MockDisplay : IDisplay
     {
-        public List<string> Lines = new List<string>();
+        public List<string> Lines = new();
 
         public VerbosityLevel Verbosity { get; set; }
 
