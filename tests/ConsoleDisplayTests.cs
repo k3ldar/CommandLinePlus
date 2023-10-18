@@ -121,7 +121,7 @@ namespace CommandLinePlusTests
         [TestMethod]
         public void WriteWarning_ValidString_MessageDisplayed()
         {
-            ConsoleDisplay sut = new ConsoleDisplay(new CommandLineArguments(new string[] { }));
+            ConsoleDisplay sut = new ConsoleDisplay(new CommandLineArguments(Array.Empty<string>()));
             sut.WriteLine("test");
 
             Assert.AreEqual(1, sut.LineCount);
@@ -130,7 +130,7 @@ namespace CommandLinePlusTests
         [TestMethod]
         public void Verbosity_DefaultNormal_Success()
         {
-            string[] args = new string[] { };
+            string[] args = Array.Empty<string>();
             ConsoleDisplay sut = new ConsoleDisplay(new CommandLineArguments(args));
             Assert.AreEqual(VerbosityLevel.Normal, sut.Verbosity);
         }
@@ -223,7 +223,7 @@ namespace CommandLinePlusTests
 
         private ICommandLineArguments CreateArgs()
         {
-            return new CommandLineArguments(new string[] { });
+            return new CommandLineArguments(Array.Empty<string>());
         }
     }
 }

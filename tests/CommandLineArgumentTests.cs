@@ -105,9 +105,6 @@ namespace CommandLinePlusTests
             Assert.AreEqual("", sut.Get<string>("test1"));
             Assert.AreEqual("test2V=alue", sut.Get<string>("test2"));
             Assert.AreEqual("test3va:lue", sut.Get<string>("test3"));
-            //Assert.AreEqual(2, sut.InvalidArgs.Count);
-            //Assert.IsTrue(sut.InvalidArgs.Contains("test1"));
-            //Assert.IsTrue(sut.InvalidArgs.Contains("value"));
         }
 
         [TestMethod]
@@ -124,9 +121,6 @@ namespace CommandLinePlusTests
             Assert.AreEqual("", sut.Get<string>("test1"));
             Assert.AreEqual("test2V=alue", sut.Get<string>("test2"));
             Assert.AreEqual("test3va:lUE", sut.Get<string>("test3"));
-            //Assert.AreEqual(2, sut.InvalidArgs.Count);
-            //Assert.IsTrue(sut.InvalidArgs.Contains("test1"));
-            //Assert.IsTrue(sut.InvalidArgs.Contains("value"));
         }
 
         [TestMethod]
@@ -144,9 +138,6 @@ namespace CommandLinePlusTests
             Assert.AreEqual("", sut.Get<string>("test1"));
             Assert.AreEqual("test2V=alue", sut.Get<string>("test2"));
             Assert.AreEqual("test3va:lUE", sut.Get<string>("test3"));
-            //Assert.AreEqual(2, sut.InvalidArgs.Count);
-            //Assert.IsTrue(sut.InvalidArgs.Contains("test1"));
-            //Assert.IsTrue(sut.InvalidArgs.Contains("value"));
         }
 
         [TestMethod]
@@ -203,9 +194,6 @@ namespace CommandLinePlusTests
             string[] args = new string[] { "--boolValue:true test1 value" };
             CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(1, sut.ArgumentCount);
-            //Assert.AreEqual(2, sut.InvalidArgs.Count);
-            //Assert.IsTrue(sut.InvalidArgs.Contains("test1"));
-            //Assert.IsTrue(sut.InvalidArgs.Contains("value"));
             Assert.IsTrue(sut.Get<bool>("boolValue"));
         }
 
@@ -222,7 +210,7 @@ namespace CommandLinePlusTests
         [TestMethod]
         public void Get_FailToConvertToTypeString_ReturnsDefaultValueForType()
         {
-            string[] args = new string[] { };
+            string[] args = Array.Empty<string>();
             CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(0, sut.ArgumentCount);
             Assert.IsFalse(sut.Contains("stringValue"));
@@ -242,7 +230,7 @@ namespace CommandLinePlusTests
         [TestMethod]
         public void Get_NotFound_ReturnsDefaultValueForType_Bool_Success()
         {
-            string[] args = new string[] { };
+            string[] args = Array.Empty<string>();
             CommandLineArguments sut = new CommandLineArguments(args);
             Assert.AreEqual(0, sut.ArgumentCount);
             Assert.IsFalse(sut.Contains("boolValue"));

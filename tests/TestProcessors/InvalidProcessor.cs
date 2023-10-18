@@ -5,7 +5,7 @@ namespace CommandLinePlusTests.TestProcessors
     [ExcludeFromCodeCoverage]
     internal class InvalidProcessor
     {
-        public void DoNothing()
+        public static void DoNothing()
         {
             // does nothing
         }
