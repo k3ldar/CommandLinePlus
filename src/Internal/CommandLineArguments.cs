@@ -112,12 +112,15 @@ namespace CommandLinePlus.Internal
             var currentArg = new StringBuilder(30);
             var currentArgValue = new StringBuilder();
 
-            string arg = String.Empty;
+            StringBuilder arg = new(1024);
 
             foreach (string s in args)
-                arg += $" {s.Trim()}";
+            {
+                if (arg.Length > 0)
+                    arg.Append(' ');
 
-            arg = arg.Trim();
+                arg.Append(s.Trim());
+            }
 
             bool peekAhead;
             bool isArgFound = false;
@@ -213,10 +216,6 @@ namespace CommandLinePlus.Internal
                             currentArg.Clear();
                             isSub = false;
                         }
-                        //else if (isArgFound && !isArgValue)
-                        //{
-                        //    isArgValue = true;
-                        //}
                         else if (isArgValue && isQuote)
                         {
                             currentArgValue.Append(c);
