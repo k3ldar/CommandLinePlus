@@ -52,7 +52,6 @@ namespace CommandLinePlus
         ///// Returns a list of invalid arguments
         ///// </summary>
         ///// <returns>List&lt;string&gt;</returns>
-        //IReadOnlyList<string> InvalidArgs { get; }
     }
 #pragma warning restore CA1716
 }

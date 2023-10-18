@@ -10,7 +10,27 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{47BF7F37-C8D3-4CBB-B47E-13E0FF6EE091}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{73D00771-9473-4C4B-AB3A-708E5F432DD8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEMPLATE", "{FE767E40-8D20-4BF3-8719-6095567151E5}"
+	ProjectSection(SolutionItems) = preProject
+		.github\ISSUE_TEMPLATE\bug_report.md = .github\ISSUE_TEMPLATE\bug_report.md
+		.github\ISSUE_TEMPLATE\feature_request.md = .github\ISSUE_TEMPLATE\feature_request.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{81919E8B-C6FA-48E6-BFEA-9DFD62243352}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\codeql.yml = .github\workflows\codeql.yml
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		.github\workflows\SonarCloud.yml = .github\workflows\SonarCloud.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CmdLineTest", "CmdLineTest\CmdLineTest.csproj", "{36678426-3871-42A9-A0D0-292437F57ACF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +46,18 @@ Global
 		{BD93945B-D098-432A-8B38-BC8E5F35A9AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD93945B-D098-432A-8B38-BC8E5F35A9AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD93945B-D098-432A-8B38-BC8E5F35A9AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36678426-3871-42A9-A0D0-292437F57ACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36678426-3871-42A9-A0D0-292437F57ACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36678426-3871-42A9-A0D0-292437F57ACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36678426-3871-42A9-A0D0-292437F57ACF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{73D00771-9473-4C4B-AB3A-708E5F432DD8} = {47BF7F37-C8D3-4CBB-B47E-13E0FF6EE091}
+		{FE767E40-8D20-4BF3-8719-6095567151E5} = {73D00771-9473-4C4B-AB3A-708E5F432DD8}
+		{81919E8B-C6FA-48E6-BFEA-9DFD62243352} = {73D00771-9473-4C4B-AB3A-708E5F432DD8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46C5A33E-3F5D-4A23-9774-21130AF23AB1}

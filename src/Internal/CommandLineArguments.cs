@@ -19,15 +19,30 @@ namespace CommandLinePlus.Internal
 
         #region Constructors
 
+        private CommandLineArguments(string[] args, bool removeFileName)
+        {
+            if (removeFileName)
+            {
+                string[] argsWithoutFileName = new string[args.Length - 1];
+
+                for (int i = 1; i < args.Length; i++)
+                    argsWithoutFileName[i -1] = args[i];
+
+                args = argsWithoutFileName;
+            }
+
+            (_primaryOption, _subOption, _args) = ConvertArgsToDictionary(args ?? Array.Empty<string>());
+        }
+
         public CommandLineArguments()
-          : this(Environment.GetCommandLineArgs())
+          : this(Environment.GetCommandLineArgs(), true)
         {
 
         }
 
         public CommandLineArguments(string[] args)
+            : this (args, false)
         {
-            (_primaryOption, _subOption, _args) = ConvertArgsToDictionary(args ?? Array.Empty<string>());
         }
 
         #endregion Constructors

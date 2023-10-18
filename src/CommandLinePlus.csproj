@@ -20,6 +20,11 @@
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <AnalysisLevel>latest-all</AnalysisLevel>
     <NeutralLanguage>en-GB</NeutralLanguage>
+    <Description>CommandLinePlus - Command line processor for c# which can use an option sub option and parameters
+
+myprog.exe Option Sub -p1:test /p3:test</Description>
+    <PackageProjectUrl>https://github.com/k3ldar/CommandLinePlus</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/k3ldar/CommandLinePlus</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -91,5 +96,10 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-    
+
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)|$(CodeSignAssembly)'=='Release|true'">
+    <Exec Command="call &quot;..\..\SignCmdLinePlus.bat&quot; &quot;$(TargetDir)$(TargetName)$(TargetExt)&quot;" />
+  </Target>
+	
 </Project>

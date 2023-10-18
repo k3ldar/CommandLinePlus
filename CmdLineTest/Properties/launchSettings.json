@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CmdLineTest": {
+      "commandName": "Project",
+      "commandLineArgs": "Plugin Add /p:MyPlugin"
+    }
+  }
+}

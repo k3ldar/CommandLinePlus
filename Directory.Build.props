@@ -1,5 +1,6 @@
 <Project>
-  
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))"
+    Condition="Exists('$(MSBuildThisFileDirectory)..\Directory.Build.props')"/>
   <PropertyGroup>
 	<FrameWorks>net7.0;netstandard2.0</FrameWorks>
     <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
