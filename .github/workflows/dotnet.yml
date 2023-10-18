@@ -21,8 +21,8 @@ jobs:
       with:
         dotnet-version: 7.x
     - name: Restore dependencies
-      run: dotnet restore  ./src/CommandLinePlus.sln
+      run: dotnet restore  ./CommandLinePlus.sln
     - name: Build 
-      run: dotnet build ./src/CommandLinePlus.sln --configuration Release --no-restore
+      run: dotnet build ./CommandLinePlus.sln --configuration Release --no-restore
     - name: Test
-      run: dotnet test ./src/CommandLinePlus.sln --configuration Release --no-build --verbosity normal
+      run: dotnet test ./CommandLinePlus.sln --configuration Release --no-build --verbosity normal
