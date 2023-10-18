@@ -1,4 +1,6 @@
-﻿namespace CmdLineTest
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace CmdLineTest
 {
     internal class PluginProcessor : BaseCommandLine
     {

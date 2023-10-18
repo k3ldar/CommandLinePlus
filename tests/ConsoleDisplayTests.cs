@@ -221,7 +221,7 @@ namespace CommandLinePlusTests
             throw new NotImplementedException("outer", new Exception());
         }
 
-        private ICommandLineArguments CreateArgs()
+        private static ICommandLineArguments CreateArgs()
         {
             return new CommandLineArguments(Array.Empty<string>());
         }
