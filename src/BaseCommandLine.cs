@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace CommandLinePlus
 {
     /// <summary>
@@ -6,6 +8,37 @@ namespace CommandLinePlus
     /// </summary>
     public abstract class BaseCommandLine
     {
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        protected BaseCommandLine()
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor used for unit testing purposes only!
+        /// </summary>
+        /// <param name="args"></param>
+        /// <param name="display"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        protected BaseCommandLine(ICommandLineArguments args, IDisplay display)
+            : this()
+        {
+            CommandLineArgs = args ?? throw new ArgumentNullException(nameof(args));
+            Display = display ?? throw new ArgumentNullException(nameof(display));
+        }
+
+        /// <summary>
+        /// Command line args supplied via factory
+        /// </summary>
+        protected ICommandLineArguments CommandLineArgs { get; private set; }
+
+        /// <summary>
+        /// Display currently being used
+        /// </summary>
+        protected IDisplay Display { get; private set; }
+
         /// <summary>
         /// Name of processor, also serves as command line option
         /// </summary>
@@ -24,12 +57,17 @@ namespace CommandLinePlus
         /// <summary>
         /// Shows help information for the class
         /// </summary>
-        public abstract void DisplayHelp(IDisplay display);
+        public abstract void DisplayHelp();
 
         /// <summary>
         /// Default method to be called when no methods match sub option (method name)
         /// </summary>
-        /// <param name="args">all args passed to application, minus primary and sub names</param>
-        public abstract void Execute(string[] args);
+        public abstract int Execute(string[] args);
+
+        internal void Update(ICommandLineArguments args, IDisplay display)
+        {
+            CommandLineArgs = args ?? throw new ArgumentNullException(nameof(args));
+            Display = display ?? throw new ArgumentNullException(nameof(display));
+        }
     }
 }

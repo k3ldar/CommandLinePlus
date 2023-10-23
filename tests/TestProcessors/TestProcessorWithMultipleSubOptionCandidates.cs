@@ -18,47 +18,45 @@ namespace CommandLinePlusTests.TestProcessors
 
         public override bool IsEnabled => true;
 
-        public override void DisplayHelp(IDisplay display)
+        public override void DisplayHelp()
         {
-            display.WriteLine("Test");
-            display.WriteLine("    Add");
-            display.WriteLine("    -a    Option a");
-            display.WriteLine("    -b    Option b");
-            display.WriteLine("    -c    Option c");
-            display.WriteLine("    -d    Option d");
-            display.WriteLine("    -e    Option e");
+            // required to be overridden
         }
 
-        public override void Execute(string[] args)
+        public override int Execute(string[] args)
         {
-            throw new NotImplementedException();
+            return -10;
         }
 
-        public void Test(string a)
+        public int Test(string a)
         {
             ArgsPassed.Add(a);
+            return -1;
         }
 
-        public void Test(string a, DateTime b)
+        public int Test(string a, DateTime b)
         {
             ArgsPassed.Add(a);
             ArgsPassed.Add(b.ToString());
+            return 1;
         }
 
-        public void Test(string a, uint b, decimal c)
+        public int Test(string a, uint b, decimal c)
         {
             ArgsPassed.Add(a);
             ArgsPassed.Add(b.ToString());
             ArgsPassed.Add(c.ToString());
+            return 0;
         }
 
-        public void Test(Guid a, string b, string c, bool d = true, byte e = 123)
+        public int Test([CmdLineAbbreviation("a")]Guid guidArgumentName, string b, string c, bool d = true, byte e = 123)
         {
-            ArgsPassed.Add(a.ToString());
+            ArgsPassed.Add(guidArgumentName.ToString());
             ArgsPassed.Add(b);
             ArgsPassed.Add(c);
             ArgsPassed.Add(d.ToString());
             ArgsPassed.Add(e.ToString());
+            return 0;
         }
 
         public List<string> ArgsPassed { get; private set; } = new();

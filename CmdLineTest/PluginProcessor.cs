@@ -2,6 +2,7 @@
 
 namespace CmdLineTest
 {
+    [CmdLineDescription("Processes plugins for entire application")]
     internal class PluginProcessor : BaseCommandLine
     {
         public override string Name => "Plugin";
@@ -10,43 +11,64 @@ namespace CmdLineTest
 
         public override bool IsEnabled => true;
 
-        public override void DisplayHelp(IDisplay display)
+        public override void DisplayHelp()
         {
-            display.WriteLine("Plugin");
-            display.WriteLine("    Add");
-            display.WriteLine("    Remove");
-            display.WriteLine("    Disable");
-            display.WriteLine("    Enable");
-            display.WriteLine("    -p    Name of plugin");
+
         }
 
-        public override void Execute(string[] args)
+        public override int Execute(string[] args)
         {
-            // default handler 
+            return 0;
         }
 
-        public void Add(string p)
+        [CmdLineDescription("Adds a new plugin to the application")]
+        public void Add(
+            [CmdLineAbbreviation("p")][CmdLineDescription("Name of the plugin to be added")] string pluginName)
         {
             if (IsEnabled)
-                Console.WriteLine($"Add plugin {p}");
+                Display.WriteLine(VerbosityLevel.Quiet, $"Add plugin {pluginName}");
         }
 
-        public void Remove(string p)
+        [CmdLineDescription("Removes an existing plugin from the application")]
+        public void Remove(
+            [CmdLineAbbreviation("p", "Name of the plugin to be removed")] string pluginName)
         {
             if (IsEnabled)
-                Console.WriteLine($"Remove plugin {p}");
+                Display.WriteLine(VerbosityLevel.Quiet, $"Remove plugin {pluginName}");
         }
 
-        public void Disable(string p)
+        [CmdLineDescription("Disables a plugin from being used by the application")]
+        public void Disable(
+            [CmdLineAbbreviation("p", "Name of the plugin to be disabled")] string pluginName)
         {
             if (IsEnabled)
-                Console.WriteLine($"Disable plugin {p}");
+                Display.WriteLine(VerbosityLevel.Quiet, $"Disable plugin {pluginName}");
         }
 
-        public void Enable(string p)
+        [CmdLineDescription("Enables a plugin within the application")]
+        public void Enable(
+            [CmdLineAbbreviation("p", "Name of the plugin to be enabled")] string pluginName)
         {
             if (IsEnabled)
-                Console.WriteLine($"Enable plugin {p}");
+                Display.WriteLine(VerbosityLevel.Quiet, $"Enable plugin {pluginName}");
+        }
+
+        [CmdLineDescription("Updates a plugins configuration")]
+        public void Update(
+            [CmdLineDescription("Name of the plugin to be enabled")] string pluginName)
+        {
+            if (IsEnabled)
+                Display.WriteLine(VerbosityLevel.Quiet, $"Enable plugin {pluginName}");
+        }
+
+        [CmdLineDescription("Updates a plugins configuration")]
+        public void Update(
+            [CmdLineAbbreviation("p", "Name of the plugin to be enabled")] string pluginName,
+            [CmdLineDescription("Boolean option A")] bool optionA,
+            [CmdLineDescription("Int options B")] int optionB)
+        {
+            if (IsEnabled)
+                Display.WriteLine(VerbosityLevel.Quiet, $"Enable plugin {pluginName}; Option A: {optionA}; Options B: {optionB}");
         }
     }
 }

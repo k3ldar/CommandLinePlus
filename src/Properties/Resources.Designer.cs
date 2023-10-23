@@ -70,6 +70,15 @@ namespace CommandLinePlus.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verbosity 0 = quiet; 1 = normal; 2 = diagnostic; 3 = full e.g. -v:3.
+        /// </summary>
+        public static string DisplayVerbosity {
+            get {
+                return ResourceManager.GetString("DisplayVerbosity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Finding Processors.
         /// </summary>
         public static string FindingProcessors {
@@ -79,7 +88,7 @@ namespace CommandLinePlus.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Help {0}.
+        ///   Looks up a localized string similar to {0}{1}{2}.
         /// </summary>
         public static string HelpOption {
             get {
@@ -115,7 +124,7 @@ namespace CommandLinePlus.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verbosity {0}.
+        ///   Looks up a localized string similar to {0}{1}{2}.
         /// </summary>
         public static string VerbosityOption {
             get {

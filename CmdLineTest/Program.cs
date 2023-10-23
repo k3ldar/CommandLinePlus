@@ -10,12 +10,17 @@ object[] processors = new object[]
 
 IConsoleProcessor consoleProcessor = factory.Create("MyProg", processors);
 
-switch (consoleProcessor.Run())
+switch (consoleProcessor.Run(out int resultCode))
 {
     case RunResult.CandidateFound:
         Console.WriteLine("finished");
         break;
 
+    case RunResult.DisplayHelp:
+        break;
+
     default:
         throw new InvalidOperationException("Didn't work");
 }
+
+return resultCode;

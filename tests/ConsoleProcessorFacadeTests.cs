@@ -239,5 +239,84 @@ namespace CommandLinePlusTests
             Assert.AreEqual(6, mockDisplay.Lines.Count);
             Assert.AreEqual("Could not convert argument e (874635) to Byte - Value was either too large or too small for an unsigned byte.", mockDisplay.Lines[5]);
         }
+
+        [TestMethod]
+        public void Run_ShowHelp_NoPrimaryOption_DisplaysAllSubOptionsWithDescriptions_Success()
+        {
+            TestProcessorWithMultipleSubOptionCandidates testProcessor = new();
+            ICommandLineArguments args = new CommandLineArguments(new string[]
+                {
+                    "--?"
+                });
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("My Program",
+                new object[]
+                {
+                    testProcessor,
+                },
+                args, mockDisplay);
+
+            RunResult result = sut.Run();
+            Assert.AreEqual(RunResult.DisplayHelp, result);
+            Assert.AreEqual(9, mockDisplay.Lines.Count);
+            Assert.AreEqual("Quiet Option\t\t", mockDisplay.Lines[8]);
+        }
+
+        [TestMethod]
+        public void Run_ShowHelp_WithPrimaryOption_DisplaysAllSubOptionsWithDescriptions_Success()
+        {
+            TestProcessorWithMultipleSubOptionCandidates testProcessor = new();
+            ICommandLineArguments args = new CommandLineArguments(new string[]
+                {
+                    " Option --?"
+                });
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("My Program",
+                new object[]
+                {
+                    testProcessor,
+                },
+                args, mockDisplay);
+
+            RunResult result = sut.Run();
+            Assert.AreEqual(RunResult.DisplayHelp, result);
+            Assert.AreEqual(10, mockDisplay.Lines.Count);
+            Assert.AreEqual("Full Processor valid Option", mockDisplay.Lines[4]);
+            Assert.AreEqual("Quiet    -?                   Displays help information", mockDisplay.Lines[5]);
+            Assert.AreEqual("Quiet    -v                   Verbosity 0 = quiet; 1 = normal; 2 = diagnostic; 3 = full e.g. -v:3", mockDisplay.Lines[6]);
+            Assert.AreEqual("Quiet \t", mockDisplay.Lines[7]);
+            Assert.AreEqual("Quiet Option", mockDisplay.Lines[8]);
+            Assert.AreEqual("Quiet   Test                  ", mockDisplay.Lines[9]);
+        }
+
+        [TestMethod]
+        public void Run_ShowHelp_WithPrimaryAndSubOptions_DisplaysAllParameterItemsWithDescriptions_Success()
+        {
+            TestProcessorWithMultipleSubOptionCandidates testProcessor = new();
+            ICommandLineArguments args = new CommandLineArguments(new string[]
+                {
+                    " Option Test --?"
+                });
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("My Program",
+                new object[]
+                {
+                    testProcessor,
+                },
+                args, mockDisplay);
+
+            RunResult result = sut.Run();
+            Assert.AreEqual(RunResult.DisplayHelp, result);
+            Assert.AreEqual(14, mockDisplay.Lines.Count);
+            Assert.AreEqual("Quiet    -?                   Displays help information", mockDisplay.Lines[5]);
+            Assert.AreEqual("Quiet    -v                   Verbosity 0 = quiet; 1 = normal; 2 = diagnostic; 3 = full e.g. -v:3", mockDisplay.Lines[6]);
+            Assert.AreEqual("Quiet \t", mockDisplay.Lines[7]);
+            Assert.AreEqual("Quiet Option Test         ", mockDisplay.Lines[8]);
+            Assert.AreEqual("Quiet    -guidArgumentName     (abbr. -a)", mockDisplay.Lines[9]);
+            Assert.AreEqual("Quiet    -b                    ", mockDisplay.Lines[10]);
+            Assert.AreEqual("Quiet    -c                    ", mockDisplay.Lines[11]);
+            Assert.AreEqual("Quiet    -d                    ", mockDisplay.Lines[12]);
+            Assert.AreEqual("Quiet    -e                    ", mockDisplay.Lines[13]);
+        }
     }
 }
