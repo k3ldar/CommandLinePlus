@@ -120,11 +120,14 @@
   <data name="DisplayHelp" xml:space="preserve">
     <value>Displays help information</value>
   </data>
+  <data name="DisplayVerbosity" xml:space="preserve">
+    <value>Verbosity 0 = quiet; 1 = normal; 2 = diagnostic; 3 = full e.g. -v:3</value>
+  </data>
   <data name="FindingProcessors" xml:space="preserve">
     <value>Finding Processors</value>
   </data>
   <data name="HelpOption" xml:space="preserve">
-    <value>Help {0}</value>
+    <value>{0}{1}{2}</value>
   </data>
   <data name="ProcessorFound" xml:space="preserve">
     <value>Processor Found {0}</value>
@@ -136,6 +139,6 @@
     <value>Processor valid {0}</value>
   </data>
   <data name="VerbosityOption" xml:space="preserve">
-    <value>Verbosity {0}</value>
+    <value>{0}{1}{2}</value>
   </data>
 </root>

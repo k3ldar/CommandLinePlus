@@ -14,45 +14,50 @@ namespace CommandLinePlusTests.TestProcessors
 
         public override bool IsEnabled => true;
 
-        public override void DisplayHelp(IDisplay display)
+        public override void DisplayHelp()
         {
-            display.WriteLine("Plugin");
-            display.WriteLine("    Add");
-            display.WriteLine("    Remove");
-            display.WriteLine("    Disable");
-            display.WriteLine("    Enable");
-            display.WriteLine("    -p    Name of plugin");
+            Display.WriteLine("Plugin");
+            Display.WriteLine("    Add");
+            Display.WriteLine("    Remove");
+            Display.WriteLine("    Disable");
+            Display.WriteLine("    Enable");
+            Display.WriteLine("    -p    Name of plugin");
         }
 
-        public override void Execute(string[] args)
+        public override int Execute(string[] args)
         {
             // default handler 
             MethodsCalled.Add(nameof(Execute));
             ArgsPassedToExecute = args;
+            return 0;
         }
 
-        public void Add(string p)
+        public int Add(string p)
         {
             MethodsCalled.Add(nameof(Add));
             ArgsPassed.Add(p);
+            return 0;
         }
 
-        public void Remove(string p)
+        public int Remove(string p)
         {
             MethodsCalled.Add(nameof(Remove));
             ArgsPassed.Add(p);
+            return 0;
         }
 
-        public void Disable(string p)
+        public int Disable(string p)
         {
             MethodsCalled.Add(nameof(Disable));
             ArgsPassed.Add(p);
+            return 0;
         }
 
-        public void Enable(string p)
+        public int Enable(string p)
         {
             MethodsCalled.Add(nameof(Enable));
             ArgsPassed.Add(p);
+            return 0;
         }
 
         public string[] ArgsPassedToExecute { get; private set; }

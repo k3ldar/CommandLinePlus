@@ -18,6 +18,7 @@ namespace CommandLinePlus
         public IConsoleProcessor Create(string processName, object[] processors, ICommandLineArguments args = null, IDisplay display = null)
         {
             args ??= new CommandLineArguments();
+
             return new ConsoleProcessorFacade(processName,
                 processors,
                 args,

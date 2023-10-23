@@ -31,7 +31,7 @@
   </PropertyGroup>
 	
   <PropertyGroup>
-	<AssemblyVersion>1.0.0</AssemblyVersion>
+	<AssemblyVersion>2.0.0</AssemblyVersion>
     <Version>$(AssemblyVersion).0</Version>
 	<FileVersion>$(Version)</FileVersion>
 	<ProductVersion>$(Version)</ProductVersion>
