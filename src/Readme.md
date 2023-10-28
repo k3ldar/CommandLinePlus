@@ -32,7 +32,7 @@ myprog.exe Plugin Enable -p:myplugin
 
 ```
     [CmdLineDescription("Processes plugins for entire application")]
-    internal class PluginProcessor : BaseCommandLine
+    internal class PluginProcessor : BaseCommandLine, IDisposable
     {
         public override string Name => "Plugin";
 
@@ -98,6 +98,12 @@ myprog.exe Plugin Enable -p:myplugin
         {
             if (IsEnabled)
                 Display.WriteLine(VerbosityLevel.Quiet, $"Enable plugin {pluginName}; Option A: {optionA}; Options B: {optionB}");
+        }
+
+        [CmdLineHidden]
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 ```

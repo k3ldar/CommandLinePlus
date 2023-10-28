@@ -24,6 +24,8 @@ namespace CommandLinePlusTests
             Assert.AreEqual(18, sut.ParameterMinimumLength);
             Assert.AreEqual("  ", sut.ParameterSuffix);
             Assert.AreEqual(22, sut.InternalOptionsMinimumLength);
+            Assert.IsTrue(sut.CaseSensitiveOptionNames);
+            Assert.IsFalse(sut.CaseSensitiveSubOptionNames);
         }
     }
 }

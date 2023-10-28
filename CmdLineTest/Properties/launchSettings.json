@@ -2,7 +2,7 @@
   "profiles": {
     "CmdLineTest": {
       "commandName": "Project",
-      "commandLineArgs": "Plugin Remove -v:1 -?"
+      "commandLineArgs": "Plugin add -p:\"my plugin 1\" -a:\"ass\" -u:15 -m:1 -f:0 -v:3"
     }
   }
 }

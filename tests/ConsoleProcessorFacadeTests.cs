@@ -280,13 +280,14 @@ namespace CommandLinePlusTests
 
             RunResult result = sut.Run();
             Assert.AreEqual(RunResult.DisplayHelp, result);
-            Assert.AreEqual(10, mockDisplay.Lines.Count);
+            Assert.AreEqual(11, mockDisplay.Lines.Count);
             Assert.AreEqual("Full Processor valid Option", mockDisplay.Lines[4]);
             Assert.AreEqual("Quiet    -?                   Displays help information", mockDisplay.Lines[5]);
             Assert.AreEqual("Quiet    -v                   Verbosity 0 = quiet; 1 = normal; 2 = diagnostic; 3 = full e.g. -v:3", mockDisplay.Lines[6]);
             Assert.AreEqual("Quiet \t", mockDisplay.Lines[7]);
             Assert.AreEqual("Quiet Option", mockDisplay.Lines[8]);
             Assert.AreEqual("Quiet   Test                  ", mockDisplay.Lines[9]);
+            Assert.AreEqual("Quiet   EnumTest              ", mockDisplay.Lines[10]);
         }
 
         [TestMethod]
@@ -317,6 +318,73 @@ namespace CommandLinePlusTests
             Assert.AreEqual("Quiet    -c                    ", mockDisplay.Lines[11]);
             Assert.AreEqual("Quiet    -d                    ", mockDisplay.Lines[12]);
             Assert.AreEqual("Quiet    -e                    ", mockDisplay.Lines[13]);
+        }
+
+        [TestMethod]
+        public void Run_CaseInsensitive_SubOptionFound_OverflowException_CallsRequiredMethod()
+        {
+            TestProcessorWithMultipleSubOptionCandidates testProcessor = new();
+            ICommandLineArguments args = new CommandLineArguments(new string[]
+                {
+                    "option", "test",
+                    "/a=\"a2f119a9-d030-4025-b122-a00a32288d94\"",
+                    "-b:hello",
+                    "--c=world",
+                    "-e:23"
+                });
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("My Program",
+                new object[]
+                {
+                    testProcessor,
+                },
+                args, mockDisplay);
+
+            MockOptions mockOptions = new MockOptions()
+            {
+                CaseSensitiveOptionNames = false,
+                CaseSensitiveSubOptionNames = false,
+            };
+
+            RunResult result = sut.Run(mockOptions, out int resultCode);
+            Assert.AreEqual(RunResult.CandidateFound, result);
+            Assert.AreEqual(0, resultCode);
+            Assert.AreEqual(5, mockDisplay.Lines.Count);
+            Assert.AreEqual("Full Processor valid Option", mockDisplay.Lines[4]);
+        }
+
+        [TestMethod]
+        public void Run_SubOptionFound_WithEnum_ParamByName_Success()
+        {
+            TestProcessorWithMultipleSubOptionCandidates testProcessor = new();
+            ICommandLineArguments args = new CommandLineArguments(new string[] { "Option", "EnumTest", "-e:All" });
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("TestSuite",
+                new object[]
+                {
+                    testProcessor,
+                },
+                args, mockDisplay);
+
+            RunResult result = sut.Run();
+            Assert.AreEqual(RunResult.CandidateFound, result);
+        }
+
+        [TestMethod]
+        public void Run_SubOptionFound_WithEnum_ParamByValue_Success()
+        {
+            TestProcessorWithMultipleSubOptionCandidates testProcessor = new();
+            ICommandLineArguments args = new CommandLineArguments(new string[] { "Option", "EnumTest", "-e:4" });
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("TestSuite",
+                new object[]
+                {
+                    testProcessor,
+                },
+                args, mockDisplay);
+
+            RunResult result = sut.Run();
+            Assert.AreEqual(RunResult.CandidateFound, result);
         }
     }
 }
