@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v7.0": {
-      "CommandLinePlus/2.1.0.0": {
+      "CommandLinePlus/2.2.0.0": {
         "runtime": {
           "CommandLinePlus.dll": {}
         }
@@ -14,7 +14,7 @@
     }
   },
   "libraries": {
-    "CommandLinePlus/2.1.0.0": {
+    "CommandLinePlus/2.2.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
