@@ -28,6 +28,13 @@ namespace CommandLinePlusTests.TestProcessors
             return -10;
         }
 
+        [CmdLineHidden]
+        public int Show()
+        {
+            ArgsPassed.Add("none");
+            return -24;
+        }
+
         public int Test(string a)
         {
             ArgsPassed.Add(a);

@@ -265,7 +265,12 @@ namespace CommandLinePlus.Internal
             }
 
             if (currentArg.Length > 0)
-                result[currentArg.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture)] = currentArgValue.ToString().Trim();
+            {
+                if (isSub)
+                    subOption = currentArg.ToString();
+                else
+                    result[currentArg.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture)] = currentArgValue.ToString().Trim();
+            }
 
             return (primaryOption, subOption, result);
         }
