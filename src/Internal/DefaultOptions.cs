@@ -19,5 +19,11 @@
         public string ParameterSuffix => "  ";
 
         public int InternalOptionsMinimumLength => 22;
+
+        public bool CaseSensitiveOptionNames => true;
+
+        public bool CaseSensitiveSubOptionNames => false;
+
+        public bool CaseSensitiveParameterNames => false;
     }
 }

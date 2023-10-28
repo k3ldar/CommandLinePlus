@@ -49,5 +49,20 @@
         /// Minimum length for internal options
         /// </summary>
         int InternalOptionsMinimumLength { get; }
+
+        /// <summary>
+        /// Option names as typed in are case sensitive or not
+        /// </summary>
+        bool CaseSensitiveOptionNames { get; }
+
+        /// <summary>
+        /// Sub option names as typed in are case sensitive or not
+        /// </summary>
+        bool CaseSensitiveSubOptionNames { get; }
+
+        /// <summary>
+        /// Parameter names as typed in are case sensitive or not
+        /// </summary>
+        bool CaseSensitiveParameterNames { get; }
     }
 }

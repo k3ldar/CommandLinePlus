@@ -5,6 +5,37 @@ namespace CmdLineTest
     [CmdLineDescription("Processes plugins for entire application")]
     internal class PluginProcessor : BaseCommandLine
     {
+        public enum MachineType
+        {
+            Unspecified,
+
+            CNC,
+
+            Laser,
+
+            Printer,
+        }
+
+        public enum MachineFirmware
+        {
+            grblv1_1,
+        }
+
+        public enum PluginHosts
+        {
+            None = 0,
+
+            Editor = 1,
+
+            SenderHost = 2,
+
+            Sender = 4,
+
+            Service = 8,
+
+            Any = Editor | SenderHost | Sender | Service,
+        }
+
         public override string Name => "Plugin";
 
         public override int SortOrder => 0;
@@ -21,12 +52,22 @@ namespace CmdLineTest
             return 0;
         }
 
-        [CmdLineDescription("Adds a new plugin to the application")]
-        public void Add(
-            [CmdLineAbbreviation("p")][CmdLineDescription("Name of the plugin to be added")] string pluginName)
+
+        [CmdLineDescription("Adds a new plugin")]
+        public int Add(
+            [CmdLineAbbreviation("p", "Name of plugin")] string pluginName,
+            [CmdLineAbbreviation("a", "Assembly name for plugin")] string assemblyName,
+            [CmdLineAbbreviation("u", "Hosts that can load the plugin")] PluginHosts usage,
+            [CmdLineAbbreviation("m", "Type of machine the plugin is targeting.")] MachineType machineType,
+            [CmdLineAbbreviation("f", "Firmware the plugin is targeting")] MachineFirmware machineFirmware,
+            [CmdLineAbbreviation("e", "Set's enabled state")] bool enabled = true,
+            [CmdLineAbbreviation("t", "Indicates that plugin contains tool bar items")] bool showToolbarItems = false,
+            [CmdLineAbbreviation("d", "Description")] string description = null)
         {
             if (IsEnabled)
-                Display.WriteLine(VerbosityLevel.Quiet, $"Add plugin {pluginName}");
+                Display.WriteLine(VerbosityLevel.Quiet, $"Add plugin {pluginName}; Assembly: {assemblyName}; Host: {usage}; Machine: {machineType}; Firmware: {machineFirmware}; Enabled: {enabled}; Toolbar: {showToolbarItems}; Description: {description}");
+
+            return 0;
         }
 
         [CmdLineDescription("Removes an existing plugin from the application")]

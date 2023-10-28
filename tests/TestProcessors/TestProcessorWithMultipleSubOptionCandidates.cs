@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using CommandLinePlus;
 
 namespace CommandLinePlusTests.TestProcessors
 {
     [ExcludeFromCodeCoverage]
-    internal class TestProcessorWithMultipleSubOptionCandidates : BaseCommandLine
+    internal sealed class TestProcessorWithMultipleSubOptionCandidates : BaseCommandLine, IDisposable
     {
+        [Flags]
+        public enum MyEnumValues { None = 0, One = 1, Two = 2, Four = 4, All = One | Two | Four };
+
         public override string Name => "Option";
 
         public override int SortOrder => 0;
@@ -49,7 +49,7 @@ namespace CommandLinePlusTests.TestProcessors
             return 0;
         }
 
-        public int Test([CmdLineAbbreviation("a")]Guid guidArgumentName, string b, string c, bool d = true, byte e = 123)
+        public int Test([CmdLineAbbreviation("a")] Guid guidArgumentName, string b, string c, bool d = true, byte e = 123)
         {
             ArgsPassed.Add(guidArgumentName.ToString());
             ArgsPassed.Add(b);
@@ -57,6 +57,18 @@ namespace CommandLinePlusTests.TestProcessors
             ArgsPassed.Add(d.ToString());
             ArgsPassed.Add(e.ToString());
             return 0;
+        }
+
+        public int EnumTest([CmdLineAbbreviation("e")] MyEnumValues myEnum)
+        {
+            ArgsPassed.Add(myEnum.ToString());
+            return 0;
+        }
+
+        [CmdLineHidden]
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
 
         public List<string> ArgsPassed { get; private set; } = new();

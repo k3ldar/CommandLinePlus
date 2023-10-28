@@ -74,7 +74,8 @@ namespace CommandLinePlus.Internal
 
         private RunResult FindAndExecuteCommandLineProcessor(List<BaseCommandLine> processors, out int resultCode)
         {
-            var validProcessors = processors.Where(p => p.Name.Equals(_args.PrimaryOption, StringComparison.Ordinal)).ToArray();
+            StringComparison stringComparer = _options.CaseSensitiveOptionNames ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            var validProcessors = processors.Where(p => p.Name.Equals(_args.PrimaryOption, stringComparer)).ToArray();
 
             if (validProcessors.Length == 0)
             {
@@ -138,13 +139,18 @@ namespace CommandLinePlus.Internal
 
                     if (_args.Contains(argName))
                     {
-
                         // validate the param to make sure it can be used
                         try
                         {
-                            if (param.ParameterType.FullName.Equals("System.Guid", StringComparison.Ordinal))
+                            StringComparison stringComparer = _options.CaseSensitiveParameterNames ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+                            if (param.ParameterType.FullName.Equals("System.Guid", stringComparer))
                             {
                                 parameters.Add(TypeDescriptor.GetConverter(param.ParameterType).ConvertFromInvariantString(_args.Get<string>(argName)));
+                            }
+                            else if (param.ParameterType.BaseType.Name.Equals("Enum", stringComparer))
+                            {
+                                parameters.Add(Enum.Parse(param.ParameterType, _args.Get<string>(argName), true));
                             }
                             else
                             {
@@ -211,7 +217,8 @@ namespace CommandLinePlus.Internal
                 return DisplayAllPrimaryOptions(processors);
             }
 
-            BaseCommandLine processor = processors.Find(p => p.Name.Equals(_args.PrimaryOption, StringComparison.OrdinalIgnoreCase));
+            StringComparison stringComparerOption = _options.CaseSensitiveOptionNames ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            BaseCommandLine processor = processors.Find(p => p.Name.Equals(_args.PrimaryOption, stringComparerOption));
 
             if (processor == null)
             {
@@ -224,8 +231,10 @@ namespace CommandLinePlus.Internal
                 return DisplayAllSubOptionsForProcessor(processor);
             }
 
+            StringComparison stringComparerSubOption = _options.CaseSensitiveSubOptionNames ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
             MethodInfo subOption = processor.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Where(m => m.Name.Equals(_args.SubOption, StringComparison.OrdinalIgnoreCase))
+                .Where(m => m.Name.Equals(_args.SubOption, stringComparerSubOption))
                 .OrderByDescending(m => m.GetParameters().Length)
                 .FirstOrDefault();
 
@@ -263,7 +272,7 @@ namespace CommandLinePlus.Internal
 
             foreach (MethodInfo methodInfo in methods)
             {
-                if (namesProcessed.Contains(methodInfo.Name))
+                if (namesProcessed.Contains(methodInfo.Name) || methodInfo.GetCustomAttribute(typeof(CmdLineHiddenAttribute)) != null)
                     continue;
 
                 _display.WriteLine(Quiet, $"{_options.SubOptionPrefix}{SetMinimumLength(methodInfo.Name, _options.SubOptionMinimumLength)}{_options.SubOptionSuffix}{GetMethodDescription(methodInfo)}");
