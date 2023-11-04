@@ -260,5 +260,31 @@ namespace CommandLinePlusTests
             Assert.IsTrue(sut.Contains("q"));
             Assert.AreEqual("name", sut.Get<string>("q"));
         }
+
+        [TestMethod]
+        public void ParametersWithLongDescriptionsAndWithSpaces_ParsesCorrectly()
+        {
+            string[] args = new string[] { "Plugin", "Add", "-p:\"Grbl Tuning Wizard\"", "-d:\"Easily and automatically tune your grbl based CNC to optimum speeds\"", "-a:\"GrblTuningWizard\"", "-u:4", "-m:1", "-f:0", "-e:true", "-t:false" };
+            CommandLineArguments sut = new(args);
+            Assert.AreEqual("Plugin", sut.PrimaryOption);
+            Assert.AreEqual("Add", sut.SubOption);
+            Assert.AreEqual(8, sut.ArgumentCount);
+            Assert.IsTrue(sut.Contains("p"));
+            Assert.AreEqual("Grbl Tuning Wizard", sut.Get<string>("p"));
+            Assert.IsTrue(sut.Contains("d"));
+            Assert.AreEqual("Easily and automatically tune your grbl based CNC to optimum speeds", sut.Get<string>("d"));
+            Assert.IsTrue(sut.Contains("a"));
+            Assert.AreEqual("GrblTuningWizard", sut.Get<string>("a"));
+            Assert.IsTrue(sut.Contains("u"));
+            Assert.AreEqual(4, sut.Get<int>("u"));
+            Assert.IsTrue(sut.Contains("m"));
+            Assert.AreEqual(1, sut.Get<int>("m"));
+            Assert.IsTrue(sut.Contains("f"));
+            Assert.AreEqual(0, sut.Get<int>("f"));
+            Assert.IsTrue(sut.Contains("e"));
+            Assert.AreEqual(true, sut.Get<bool>("e"));
+            Assert.IsTrue(sut.Contains("t"));
+            Assert.AreEqual(false, sut.Get<bool>("t"));
+        }
     }
 }

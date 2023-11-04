@@ -88,7 +88,9 @@ namespace CommandLinePlus.Internal
                 return RunResult.TooManyCandidates;
             }
 
-            Type processorType = processors[0].GetType();
+            BaseCommandLine processor = validProcessors[0];
+
+            Type processorType = processor.GetType();
 
             List<MethodInfo> methods = processorType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => m.Name.Equals(_args.SubOption, StringComparison.OrdinalIgnoreCase))
@@ -98,7 +100,7 @@ namespace CommandLinePlus.Internal
             // find a matching method that has the right parameters for those passed, include default parameters if missing etc
             RunResult candidateResult = RunResult.None;
 
-            (candidateResult, resultCode) = ValidateMatchingCandidateMethods(processors[0], methods);
+            (candidateResult, resultCode) = ValidateMatchingCandidateMethods(processor, methods);
 
             if (candidateResult == RunResult.InvalidParameters || candidateResult == RunResult.CandidateFound)
             {
@@ -110,7 +112,7 @@ namespace CommandLinePlus.Internal
             {
                 // no candidate methods found, use default method instead
                 var defaultMethod = processorType.GetMethod(nameof(BaseCommandLine.Execute), BindingFlags.Instance | BindingFlags.Public);
-                resultCode = (int)defaultMethod.Invoke(processors[0], new object[] { _args.AllArguments() });
+                resultCode = (int)defaultMethod.Invoke(processor, new object[] { _args.AllArguments() });
                 return RunResult.DefaultSubOptionUsed;
             }
 
