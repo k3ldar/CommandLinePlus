@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CommandLinePlus
+﻿namespace CommandLinePlus
 {
 #pragma warning disable CA1716
     /// <summary>

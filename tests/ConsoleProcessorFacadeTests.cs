@@ -403,5 +403,23 @@ namespace CommandLinePlusTests
             RunResult result = sut.Run();
             Assert.AreEqual(RunResult.CandidateFound, result);
         }
+
+        [TestMethod]
+        public void Run_MultipleProcessors_SubOptionFound_WithNoParams_Success()
+        {
+            TestProcessorWithMultipleSubOptionCandidates testProcessor = new();
+            ICommandLineArguments args = new CommandLineArguments(new string[] { "Option", "Show" });
+            MockDisplay mockDisplay = new();
+            ConsoleProcessorFacade sut = new("TestSuite",
+                new object[]
+                {
+                    new TestPluginpProcessor(),
+                    testProcessor,
+                },
+                args, mockDisplay);
+
+            RunResult result = sut.Run();
+            Assert.AreEqual(RunResult.CandidateFound, result);
+        }
     }
 }
