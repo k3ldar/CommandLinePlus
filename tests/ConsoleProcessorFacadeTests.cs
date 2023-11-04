@@ -64,7 +64,7 @@ namespace CommandLinePlusTests
             MockDisplay mockDisplay = new();
             ConsoleProcessorFacade sut = new("TestSuite", new object[] { new TestPluginpProcessor() }, args, mockDisplay);
 
-            sut.Run();
+            sut.Run(out int _);
 
             Assert.IsTrue(mockDisplay.Lines.Count > 0);
         }
@@ -82,7 +82,7 @@ namespace CommandLinePlusTests
                 }, 
                 args, mockDisplay);
 
-            sut.Run();
+            sut.Run(out int _);
 
             Assert.IsTrue(mockDisplay.Lines.Count > 0);
         }
@@ -100,7 +100,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.TooManyCandidates, result);
         }
 
@@ -116,7 +116,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.NotEnoughCandidates, result);
         }
 
@@ -133,7 +133,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.DefaultSubOptionUsed, result);
             Assert.AreEqual(1, testProcessor.ArgsPassedToExecute.Length);
             Assert.AreEqual("p=myplugin", testProcessor.ArgsPassedToExecute[0]);
@@ -152,7 +152,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.CandidateFound, result);
             Assert.AreEqual(1, testProcessor.MethodsCalled.Count);
             Assert.IsTrue(testProcessor.MethodsCalled.Contains("Add"));
@@ -179,7 +179,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.CandidateFound, result);
             Assert.AreEqual(5, testProcessor.ArgsPassed.Count);
             Assert.AreEqual("a2f119a9-d030-4025-b122-a00a32288d94", testProcessor.ArgsPassed[0]);
@@ -208,7 +208,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.InvalidParameters, result);
             Assert.AreEqual(6, mockDisplay.Lines.Count);
             Assert.AreEqual("Could not convert argument a (not a guid) to Guid - Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).", mockDisplay.Lines[5]);
@@ -234,7 +234,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.InvalidParameters, result);
             Assert.AreEqual(6, mockDisplay.Lines.Count);
             Assert.AreEqual("Could not convert argument e (874635) to Byte - Value was either too large or too small for an unsigned byte.", mockDisplay.Lines[5]);
@@ -256,7 +256,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.DisplayHelp, result);
             Assert.AreEqual(9, mockDisplay.Lines.Count);
             Assert.AreEqual("Quiet Option\t\t", mockDisplay.Lines[8]);
@@ -278,7 +278,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.DisplayHelp, result);
             Assert.AreEqual(11, mockDisplay.Lines.Count);
             Assert.AreEqual("Full Processor valid Option", mockDisplay.Lines[4]);
@@ -306,7 +306,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.DisplayHelp, result);
             Assert.AreEqual(14, mockDisplay.Lines.Count);
             Assert.AreEqual("Quiet    -?                   Displays help information", mockDisplay.Lines[5]);
@@ -340,7 +340,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            MockOptions mockOptions = new MockOptions()
+            MockOptions mockOptions = new()
             {
                 CaseSensitiveOptionNames = false,
                 CaseSensitiveSubOptionNames = false,
@@ -366,7 +366,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.CandidateFound, result);
         }
 
@@ -383,7 +383,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.CandidateFound, result);
         }
 
@@ -400,7 +400,7 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.CandidateFound, result);
         }
 
@@ -418,8 +418,10 @@ namespace CommandLinePlusTests
                 },
                 args, mockDisplay);
 
-            RunResult result = sut.Run();
+            RunResult result = sut.Run(out int _);
             Assert.AreEqual(RunResult.CandidateFound, result);
+            Assert.AreSame(args, sut.Arguments);
+            Assert.AreSame(mockDisplay, sut.Display);
         }
     }
 }

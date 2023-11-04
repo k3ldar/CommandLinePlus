@@ -43,10 +43,9 @@ namespace CommandLinePlus.Internal
             _processors = processors;
         }
 
-        public RunResult Run()
-        {
-            return Run(out int _);
-        }
+        public IDisplay Display => _display;
+
+        public ICommandLineArguments Arguments => _args;
 
         public RunResult Run(out int result)
         {
