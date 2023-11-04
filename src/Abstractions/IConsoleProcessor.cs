@@ -22,10 +22,13 @@ namespace CommandLinePlus
         RunResult Run(ICommandLineOptions options, out int result);
 
         /// <summary>
-        /// Default run processor without result code
+        /// IDisplay instance
         /// </summary>
-        /// <returns>RunResult</returns>
-        [Obsolete("Deprecated and will be removed in future", true)]
-        RunResult Run();
+        IDisplay Display { get; }
+
+        /// <summary>
+        /// Command line arguments used by application
+        /// </summary>
+        ICommandLineArguments Arguments { get; }
     }
 }
